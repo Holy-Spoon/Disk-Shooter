@@ -1,46 +1,10 @@
-// This program is copyright VUW.
-// You are granted permission to use it to construct your answer to a COMP102 assignment.
-// You may not distribute it in any other way without permission.
-
-/* Code for COMP102 - 2025T1, Assignment 7
- * Name: Matthew McGowan
- * Username: mcgowamatt1
- * ID: 300672872
- */
-
 import ecs100.*;
 import java.awt.Color;
 import java.util.*;
 import java.nio.file.*;
 import java.io.*;
 
-/**
- * DiskGame is a simple game where the player must blow up disks spread across
- * a shooting range.
- * The game starts with a collection of randomly placed small disks in the upper
- * half of the graphics pane, and a gun at the bottom.
- * The gun is fixed in the center of a horizontal line below the shooting range
- * and can shoot in any direction within a 180-degree radius.
- * The player fires the gun using the mouse, by releasing it within the firing
- * zone, which is limited by an arc surrounding the upper part of the gun. This
- * determines the direction of the shot.
- * If a shot hits a disk, it will damage it.
- * If the disk is damaged enough, it will explode and may damage nearby disks,
- * if they are within range.
- * The player has a limited number of shots, and the goal is to cause as much
- * damage as possible.
- * Each disk has a score based on the amount of damage it sustained—the greater
- * the damage, the higher the score. The game's total score is the sum of the
- * scores for all the disks.
- * The game ends when the player runs out of shots or when all the disks have
- * exploded.
- */
-
 public class DiskGame{
-    // Constants for the game geometry: the disks in the shooting range should
-    // all be in the rectangle starting at (0,0) with a width of 500 and a
-    // height of 150
-    // The gun should be on the line at y = 300
     private static final double GAME_WIDTH = 500;
     private static final double SHOOTING_RANGE_Y = 150; // lowest point that a disk can be
     private static final double GUN_X = GAME_WIDTH/2;   // current x position of the gun
@@ -173,23 +137,7 @@ public class DiskGame{
         && (x <= GUN_X + SHOOTING_CIRCLE/2) && (y <= GUN_Y);
     }
 
-    /**
-     * The core mechanic of the game is to fire a shot.
-     * - Update the number of shots remaining.
-     * - Move the shot up the screen in the correct direction from the gun, step by step, until 
-     *   it either goes off the screen or hits a disk.
-     *   The shot is constantly redrawn as a line from the gun to its current position.
-     * - If the shot hits a disk,
-     *   - it damages the disk, 
-     *   - If the disk is now broken, then
-     *     it will damage its neighbours
-     *     (ie, all the other disks within range will be damaged also)
-     *   - it exits the loop.
-     * - Redraw the game
-     * - Finally, update the score,
-     * - If the game is now over,  print out the score 
-     * (You should define additional methods - don't do it all in one big method!)
-     */
+   
     public void fireShot(double x, double y){
         this.shotsRemaining--;
         double shotPosX = GUN_X;
@@ -252,15 +200,6 @@ public class DiskGame{
     /**
      * Inflict damage on all the neighbours of the given disk
      * (ie, all disks that are within range of the disk, and are not already broken)
-     * Note, it should not inflict more damage on the given disk.
-     * Useful when firing a shot
-     * Hint: make use of Disk class methods
-     *
-     * For A-grade-level, this should be able to cause a chain reaction 
-     *  so that neighbours that are damaged to their limit will explode and
-     *  damage their neighbours, ....
-     *
-     * You should use an ITERATIVE approach to get full marks for this task
      */
     public void damageNeighbours(Disk initialDisk) {
         /*# YOUR CODE HERE */
@@ -304,9 +243,6 @@ public class DiskGame{
      * Score is 150 for exploded disks, 50 for disks with 2 hits, and 20 for disks with 1 hit.
      */
     public void updateScore(){
-        // Hint: Each Disk can report how many points they are worth:
-        // Iterate through the ArrayList, adding up the total score of the disks.
-        /*# YOUR CODE HERE */
         this.score = 0;
         for (Disk d : disks){
             this.score += d.score();
@@ -317,15 +253,6 @@ public class DiskGame{
         UI.println("Score: " + this.score + "  Shots remaining: " + this.shotsRemaining);
     }
 
-
-    /**
-     *  Redraws the game:
-     *  - the boundary of the shooting range (done for you)
-     *  - the shooting zone in gray (done for you)
-     *  - the gun in black (done for you)
-     *  - the disks
-     *  - the pile of remaining shot
-     */
     public void redraw(){
         UI.clearGraphics();
         //Redraw the boundary of the shooting range
@@ -344,7 +271,6 @@ public class DiskGame{
 
         // Redraw the disks, and
         // the pile of small red squares illustrating the remaining rounds
-        /*# YOUR CODE HERE */
         for (Disk d : disks){
             d.draw();
         }
@@ -412,7 +338,6 @@ public class DiskGame{
      *   Hint: use the toString method
      */
     public void saveGame(){
-        /*# YOUR CODE HERE */
         try {
             String filename = UIFileChooser.save("Select file to save game");
             if (filename == null) return;
